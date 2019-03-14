@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.arcproject.arc.Common.Common;
+import com.arcproject.arc.Model.Token;
 import com.arcproject.arc.Remote.IGoogleApi;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
@@ -57,6 +58,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -88,7 +90,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
 
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
+
 
     private static int UPDATE_INTERVAL = 5000;
     private static int FATEST_INTERVAL = 3000;
@@ -170,7 +172,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
         else if (startPosition.latitude >= endPosition.latitude && startPosition.longitude >= endPosition.longitude)
             return (float)(Math.toDegrees(Math.atan(lng/lat))+180);
         else if (startPosition.latitude < endPosition.latitude && startPosition.longitude >= endPosition.longitude)
-            return (float)(Math.toDegrees((90-Math.atan(lng/lat)))+270);
+            return (float)(Math.toDegrees((90-Math.atan(lng/lat)))+260);
         return -1;
     }
 
@@ -216,7 +218,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
 
         //Places api
         if (!Places.isInitialized()) {
-        Places.initialize(getApplicationContext(), "AIzaSyB-9Pz4rg9xTYYQhf_YhVhxQdRyBa3oWjI");
+        Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
         }
 
         // Initialize the AutocompleteSupportFragment.
@@ -257,10 +259,21 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
 
         mService = Common.getGoogleAPI();
 
+        updateFirebaseToken();
+
+    }
+
+    private void updateFirebaseToken() {
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference tokens = db.getReference(Common.token_tbl);
+
+        Token token = new Token(FirebaseInstanceId.getInstance().getToken());
+        tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .setValue(token);
     }
 
     private void getDirection() {
-        currentPosition = new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude());
+        currentPosition = new LatLng(Common.mLastLocation.getLatitude(),Common.mLastLocation.getLongitude());
 
         String requestApi = null;
         try{
@@ -494,13 +507,13 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
         {
             return;
         }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null)
+        Common.mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (Common.mLastLocation != null)
         {
             if (location_switch.isChecked())
             {
-                final double latitude = mLastLocation.getLatitude();
-                final double longitude = mLastLocation.getLongitude();
+                final double latitude = Common.mLastLocation.getLatitude();
+                final double longitude = Common.mLastLocation.getLongitude();
 
                 //Update To Firebase
                 geoFire.setLocation(FirebaseAuth.getInstance().getCurrentUser().getUid(), new GeoLocation(latitude, longitude), new GeoFire.CompletionListener() {
@@ -591,7 +604,7 @@ public class Welcome extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void onLocationChanged(Location location) {
-        mLastLocation = location;
+        Common.mLastLocation = location;
         displayLocation();
     }
 }

@@ -1,4 +1,4 @@
-package com.arcproject.arc.Modul;
+package com.arcproject.arc.Model;
 
 public class User {
     private String email,password,name,phone;

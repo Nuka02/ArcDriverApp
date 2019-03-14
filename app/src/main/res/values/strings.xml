@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Arc</string>
-    <string translatable="true" name="sign_in">Prijava</string>
-    <string translatable="true" name="register">Registracija</string>
+    <string name="sign_in" translatable="true">Prijava</string>
+    <string name="register" translatable="true">Registracija</string>
     <string name="e_mail">E-mail</string>
-    <string translatable="true" name="password">Password</string>
-    <string translatable="true" name="broj_telefona">Broj telefona</string>
-    <string translatable="true" name="ime_i_prezime">Ime i Prezime</string>
+    <string name="password" translatable="true">Password</string>
+    <string name="broj_telefona" translatable="true">Broj telefona</string>
+    <string name="ime_i_prezime" translatable="true">Ime i Prezime</string>
     <string name="title_activity_welcome">Map</string>
-    <string translatable="true" name="find_user">FIND USER</string>
-    <string name="google_direction_api">AIzaSyCf5wkdB3Zgw6NXB2dA85NX9UOEfKPE30w</string>
+    <string name="find_user" translatable="true">FIND USER</string>
+    <string name="google_direction_api">AIzaSyCiSSuuDbouhR88DmalR1vkvJCQHyeBTMM</string>
 </resources>

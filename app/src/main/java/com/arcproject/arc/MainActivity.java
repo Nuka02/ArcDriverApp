@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.arcproject.arc.Common.Common;
-import com.arcproject.arc.Modul.User;
+import com.arcproject.arc.Model.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
